@@ -46,5 +46,12 @@ class PozosTableSeeder extends Seeder
 
         $pozo->fechas()->attach([1, 2]);
 
+        $pozo = new Pozo();
+        $pozo->nombre = "ARAUCANO_ZG-1C";
+        $pozo->produccion = 0;
+        $pozo->save();
+
+        $pozo->fechas()->attach([1, 2]);
+
     }
 }
