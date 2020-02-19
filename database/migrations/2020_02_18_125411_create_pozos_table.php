@@ -16,7 +16,6 @@ class CreatePozosTable extends Migration
         Schema::create('pozos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombre');
-            $table->float('produccion');
             $table->timestamps();
         });
     }

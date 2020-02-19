@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Fecha;
 use App\Pozo;
+use App\Produccion;
 
 class PozosTableSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class PozosTableSeeder extends Seeder
      */
     public function run()
     {
-        Fecha::truncate();
+        //Fecha::truncate();
 
         $fecha = new Fecha();
         $fecha->nombre = "19-12-19";
@@ -23,35 +24,55 @@ class PozosTableSeeder extends Seeder
         $fecha->nombre = "19-12-20";
         $fecha->save();
 
-        Pozo::truncate();
+        $fecha = new Fecha();
+        $fecha->nombre = "19-12-21";
+        $fecha->save();
+
+        //Pozo::truncate();
 
         $pozo = new Pozo();
         $pozo->nombre = "ARAUCANO_1";
-        $pozo->produccion = 0;
         $pozo->save();
 
-        $pozo->fechas()->attach([1, 2]);
+        $pozo->fechas()->attach([1, 2, 3]);
 
         $pozo = new Pozo();
         $pozo->nombre = "ARAUCANO_ZG-1A";
-        $pozo->produccion = 6.307;
         $pozo->save();
 
-        $pozo->fechas()->attach([1, 2]);
+        $pozo->fechas()->attach([1, 2, 3]);
 
         $pozo = new Pozo();
         $pozo->nombre = "ARAUCANO_ZG-1B";
-        $pozo->produccion = 7.066;
         $pozo->save();
 
-        $pozo->fechas()->attach([1, 2]);
+        $pozo->fechas()->attach([1, 2, 3]);
 
         $pozo = new Pozo();
         $pozo->nombre = "ARAUCANO_ZG-1C";
-        $pozo->produccion = 0;
         $pozo->save();
 
-        $pozo->fechas()->attach([1, 2]);
+        $pozo->fechas()->attach([1, 2, 3]);
+
+        $produccion = new Produccion();
+        $produccion->cantidad = 1;
+        $produccion->pozo_id=1;
+        $produccion->save();
+
+        $produccion = new Produccion();
+        $produccion->cantidad = 2;
+        $produccion->pozo_id=2;
+        $produccion->save();
+
+        $produccion = new Produccion();
+        $produccion->cantidad = 3;
+        $produccion->pozo_id=3;
+        $produccion->save();
+
+        $produccion = new Produccion();
+        $produccion->cantidad = 10;
+        $produccion->pozo_id=4;
+        $produccion->save();
 
     }
 }

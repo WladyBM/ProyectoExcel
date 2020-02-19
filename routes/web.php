@@ -9,13 +9,7 @@ Route::get('/', function () {
 
 Route::post('/excel','ExcelController@ImportarExcel')->name('importar.excel');
 
-Route::get('/excel', 'ExcelController@VerExcel')->name('ver.excel');
-
-Route::get('/dbexcel', function () {
-    $pozos = Pozo::all();
-    $fechas = Fecha::all();
-    return view('verexcel', compact('pozos', 'fechas'));
-});
+Route::get('/dbexcel', 'ExcelController@VerExcel')->name('ver.excel');
 
 Route::get('/subir', function(){
     return view('subir');
