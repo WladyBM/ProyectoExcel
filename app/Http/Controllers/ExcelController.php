@@ -7,7 +7,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use App;
-use DB;
 
 
 class ExcelController extends Controller
@@ -49,32 +48,34 @@ class ExcelController extends Controller
                 $Produccion->save();
 
             }else{
-                dd('si hay');
+                $nombre->fechas()->attach([$Fechas->id]);
+
+                $Produccion = new App\Produccion;
+                $Produccion->cantidad = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(21, $i)->getValue();
+                $Produccion->pozo_id = $nombre->id;
+                $Produccion->save();
                 
             }
         }
 
         //$dato = App\Pozos::all();
-       // return view('vista', compact('dato'));
+        // return view('vista', compact('dato'));
+        $pozos = App\Pozo::all();
+        $fechas = App\Fecha::all();
+        $producciones = App\Produccion::all();
+
+        return view('verexcel', compact('pozos','fechas'));
     }
 
     public function VerExcel(){
         $dato = array();
 
         //$fechas[]=DB::table('fechas')->select('nombre')->get();
-        $pozos = App\Pozo::all();
+        $pozos = App\Pozo::all()->sortBy('nombre');
         $fechas = App\Fecha::all();
         $producciones = App\Produccion::all();
         
-        foreach($pozos as $pozo){
-            foreach($pozo->fechas as $fechas){
-                foreach($pozo->producciones as $produccion){
-                    $dato[] = $produccion->cantidad;
-                }
-            }
-        }
-
-        dd($dato);
+        
 
         return view('verexcel', compact('pozos','fechas'));
     }

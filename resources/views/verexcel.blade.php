@@ -19,8 +19,12 @@
                 @foreach ($pozos as $pozo)
                     <tr>
                         <td>{{ $pozo->nombre }}</td>
-                        @foreach ($pozo->fechas as $fecha)
-                            <td>{{ $pozo->produccion }}</td>
+                        @foreach ($pozo->producciones as $produccion)
+                            @if (empty($produccion->cantidad))
+                                <td>0</td>
+                            @else
+                                <td>{{ $produccion->cantidad }}</td>
+                            @endif
                         @endforeach
                     </tr>
                 @endforeach   
