@@ -9,6 +9,8 @@ Route::get('/', function () {
 
 Route::post('/excel','ExcelController@ImportarExcel')->name('importar.excel');
 
+Route::get('/excel','ExcelController@VerExcel');
+
 Route::get('/dbexcel', 'ExcelController@VerExcel')->name('ver.excel');
 
 Route::get('/subir', function(){

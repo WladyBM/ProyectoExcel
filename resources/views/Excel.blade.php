@@ -8,8 +8,8 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <title>Creado</title>
     </head>
-    <div class="d-flex justify-content-center">
-        <div class="col-md-7">
+    <div>
+        <div class="col-md-12">
             @yield('contenido')
         </div>
     </div>

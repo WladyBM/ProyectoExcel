@@ -85,9 +85,9 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentación</a>
+                    
                     <a href="{{route('subir.excel')}}">Subir excel</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="{{route('ver.excel')}}">Ver pozos</a>
                 </div>
             </div>
         </div>

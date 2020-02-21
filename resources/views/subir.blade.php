@@ -6,7 +6,7 @@
             <h2>Subir archivo excel.</h2>
         </div>
     </div>
-    <div class="card-body d-flex justify-content-center">
+    <div class="card-body justify-content-center">
         <form class="form-group" enctype="multipart/form-data" method="POST" action="{{Route('importar.excel')}}">
             @csrf
             @if (count($errors) > 0)
@@ -21,12 +21,16 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @endif
-            <div class="form-group">
-                <label for="">Archivo: </label>
-                <input type="file" name="archivo">
+        @endif            
+            <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="archivo" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                  <label class="custom-file-label">Elija archivo</label>
+                </div>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-primary" type="submit">Subir excel</button>
+                </div>
             </div>
-                <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Subir excel</button>
         </form>
     </div>
 @endsection

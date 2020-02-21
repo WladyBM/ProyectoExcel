@@ -26,6 +26,8 @@ class ExcelController extends Controller
             break;
             }
         }
+
+        $dato = array();
         
         $Fechas = new App\Fecha;
         $Fechas->nombre = Date::excelToDateTimeObject($Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(7, 5)->getValue());
@@ -33,6 +35,8 @@ class ExcelController extends Controller
 
 
         for ($i = 12; $i<$final; $i++){
+
+            $dato[] = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue();
             $nombre = App\Pozo::where('nombre','=', $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue())->first();
             if($nombre == null){
                 
@@ -47,9 +51,24 @@ class ExcelController extends Controller
                 $Produccion->pozo_id = $Pozos->id;
                 $Produccion->save();
 
+                $fechita = App\Fecha::all();
+                if(count($fechita) > 1){
+                    foreach($fechita as $fecha){
+                        if($fecha->id == $Fechas->id){
+
+                        }else{
+                            $Pozos->fechas()->attach([$fecha->id]);
+
+                            $Produccion = new App\Produccion;
+                            $Produccion->cantidad = 0;
+                            $Produccion->pozo_id = $Pozos->id;
+                            $Produccion->save();
+                        }
+                    }
+                }
+
             }else{
                 $nombre->fechas()->attach([$Fechas->id]);
-
                 $Produccion = new App\Produccion;
                 $Produccion->cantidad = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(21, $i)->getValue();
                 $Produccion->pozo_id = $nombre->id;
@@ -57,10 +76,26 @@ class ExcelController extends Controller
                 
             }
         }
-
+        
         //$dato = App\Pozos::all();
         // return view('vista', compact('dato'));
-        $pozos = App\Pozo::all();
+        
+        $pocito = App\Pozo::all();
+
+        foreach($pocito as $pozo){
+            if(in_array($pozo->nombre, $dato)){
+
+            }else{
+                $pozo->fechas()->attach([$Fechas->id]);
+                
+                $Produccion = new App\Produccion;
+                $Produccion->cantidad = 0;
+                $Produccion->pozo_id = $pozo->id;
+                $Produccion->save();
+            }
+        }
+
+        $pozos = App\Pozo::orderBy('nombre')->paginate(100);
         $fechas = App\Fecha::all();
         $producciones = App\Produccion::all();
 
@@ -68,15 +103,12 @@ class ExcelController extends Controller
     }
 
     public function VerExcel(){
-        $dato = array();
 
         //$fechas[]=DB::table('fechas')->select('nombre')->get();
-        $pozos = App\Pozo::all()->sortBy('nombre');
+        $pozos = App\Pozo::orderBy('nombre')->paginate(100);
         $fechas = App\Fecha::all();
         $producciones = App\Produccion::all();
         
-        
-
         return view('verexcel', compact('pozos','fechas'));
     }
 }
