@@ -18,6 +18,8 @@ class CreateProduccionsTable extends Migration
             $table->float('cantidad');
             $table->unsignedBigInteger('pozo_id');
             $table->foreign('pozo_id')->references('id')->on('pozos'); //foranea tabla pozos
+            $table->unsignedBigInteger('fecha_id');
+            $table->foreign('fecha_id')->references('id')->on('fechas'); //foranea tabla fecha
             $table->timestamps();
         });
     }

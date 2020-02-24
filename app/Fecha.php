@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fecha extends Model
 {
-    public function pozos(){
-        return $this->belongsToMany(Pozo::class); //Relacion n - n
+    
+    public function producciones(){ //$libro->categoria->nombre
+        return $this->hasMany(Produccion::class);
     }
 }

@@ -2,13 +2,13 @@
 
 @section('contenido')
 <div class="card">
-        <h3 class="card-header d-flex justify-content-center">Produccion anual</h3>
+        <h3 class="card-header d-flex justify-content-center">Producción anual</h3>
         <div class="card-header d-flex justify-content-center">
-            {{$pozos->links()}}
+            {{$fechas->links()}}
         </div>
     <div class="card-body-sm">
         <div class="table-responsive">
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered table-striped table-sm Produccion">
                 <thead>
                     <tr class="bg-info">
                         <th scope="col" style="width: 30%"><strong>Pozos</strong></th>
@@ -21,17 +21,21 @@
                     @foreach ($pozos as $pozo)
                         <tr>
                             <td>{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pozo->nombre)) }}</td>
-                            @foreach ($pozo->producciones as $produccion)
-                                    <td>{{ $produccion->cantidad *1000 }}</td>
+                            @foreach ($fechas as $fecha)
+                                @foreach ($fecha->producciones as $produccion)
+                                    @if ($produccion->pozo_id == $pozo->id)
+                                        <td>{{ $produccion->cantidad * 1000 }}</td>
+                                    @endif
+                                @endforeach
                             @endforeach
                         </tr>
-                    @endforeach   
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
     <div class="card-footer d-flex justify-content-center">
-        {{$pozos->links()}}
+        {{$fechas->links()}}
     </div>
 </div>
 @endsection
