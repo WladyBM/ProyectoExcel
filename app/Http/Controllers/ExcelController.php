@@ -44,8 +44,6 @@ class ExcelController extends Controller
                 $Pozos->nombre = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue();
                 $Pozos->save();
 
-                $Pozos->fechas()->attach([$Fechas->id]);
-
                 $Produccion = new App\Produccion;
                 $Produccion->cantidad = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(21, $i)->getValue();
                 $Produccion->pozo_id = $Pozos->id;
@@ -58,7 +56,6 @@ class ExcelController extends Controller
                         if($fecha->id == $Fechas->id){
 
                         }else{
-                            $Pozos->fechas()->attach([$fecha->id]);
 
                             $Produccion = new App\Produccion;
                             $Produccion->cantidad = 0;
@@ -70,7 +67,6 @@ class ExcelController extends Controller
                 }
 
             }else{
-                $nombre->fechas()->attach([$Fechas->id]);
                 
                 $Produccion = new App\Produccion;
                 $Produccion->cantidad = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(21, $i)->getValue();
@@ -87,7 +83,6 @@ class ExcelController extends Controller
             if(in_array($pozo->nombre, $dato)){
 
             }else{
-                $pozo->fechas()->attach([$Fechas->id]);
                 
                 $Produccion = new App\Produccion;
                 $Produccion->cantidad = 0;
@@ -98,7 +93,7 @@ class ExcelController extends Controller
         }
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
-        $fechas = App\Fecha::paginate(15);
+        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
         $producciones = App\Produccion::all();
 
         return view('verexcel', compact('pozos','fechas'));
@@ -107,9 +102,20 @@ class ExcelController extends Controller
     public function VerExcel(){
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
-        $fechas = App\Fecha::paginate(10);
+        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
         $producciones = App\Produccion::all();
         
         return view('verexcel', compact('pozos','fechas'));
+    }
+
+    public function Eliminar($id){
+
+        $Eliminado = App\Fecha::findOrFail($id);
+        $Produccion = App\Produccion::where('fecha_id', $Eliminado->id)->delete();
+
+        $Eliminado->delete();
+
+        return back()->with('mensaje', 'Fecha eliminada exitosamente.');
+
     }
 }

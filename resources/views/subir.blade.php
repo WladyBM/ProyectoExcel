@@ -1,6 +1,6 @@
 @extends('Excel')
 
-@section('contenido')
+@section('body')
     <div class="card">
         <div class="card-header d-flex justify-content-center">
             <h2>Subir archivo excel.</h2>

@@ -1,5 +1,5 @@
-$('.Produccion').DataTable( {
-    scrollY:        '50vh',
+var tabla = $('.Produccion').DataTable( {
+    scrollY:        '55vh',
     scrollCollapse: true,
     "pageLength": 50,
     "lengthMenu": [[50, 100, -1], [50, 100, "Todos"]],

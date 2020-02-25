@@ -16,3 +16,5 @@ Route::get('/dbexcel', 'ExcelController@VerExcel')->name('ver.excel');
 Route::get('/subir', function(){
     return view('subir');
 })->name('subir.excel');
+
+Route::delete('/DelFecha/{id}', 'ExcelController@Eliminar')->name('eliminar.fecha');
