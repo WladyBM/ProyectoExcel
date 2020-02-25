@@ -25,6 +25,7 @@
                                 @foreach ($fecha->producciones as $produccion)
                                     @if ($produccion->pozo_id == $pozo->id)
                                         <td>{{ $produccion->cantidad * 1000 }}</td>
+                                        @break
                                     @endif
                                 @endforeach
                             @endforeach
