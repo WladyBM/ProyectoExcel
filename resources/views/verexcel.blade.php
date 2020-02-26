@@ -5,9 +5,13 @@
 @endsection
 
 @section('body')
-<div class="card">
+<div class="card" id="Tabla">
         <h3 class="card-header d-flex justify-content-center">Producción anual</h3>
         <div class="justify-content-center">
+            {{ $fechas->links() }}
+        </div>
+    <div class="card-body">
+        <div class="table-responsive">
             @if (session('mensaje'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>{{ session('mensaje') }}<strong>
@@ -16,10 +20,6 @@
                     </button>
                 </div>
             @endif
-            {{ $fechas->links() }}
-        </div>
-    <div class="card-body">
-        <div class="table-responsive">
             <table class="table table-bordered table-striped table-sm Produccion">
                 <thead class="thead-dark">
                     <tr>

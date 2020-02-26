@@ -14,7 +14,7 @@ class ExcelController extends Controller
     public function ImportarExcel(Request $request){
         
         $this->validate($request, [
-            'archivo' => 'required|mimes:xlsx'
+            'archivo' => 'mimes:xlsx,xls'
         ]);
 
         $path = $request->file('archivo')->getRealPath();
