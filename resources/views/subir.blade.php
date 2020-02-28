@@ -1,5 +1,7 @@
 @extends('Excel')
 
+@section('title', 'ENAP - Subir excel')
+
 @section('body')
     <div class="card">
         <h2 class="card-header d-flex justify-content-center">Subir archivo excel.</h2>
