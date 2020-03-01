@@ -22,7 +22,7 @@
                     </button>
                 </div>
             @endif
-            <table class="table table-striped table-bordered table-sm Produccion">
+            <table class="table table-striped table-bordered table-sm Produccion" style="width:100%">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col"><strong>Pozos</strong></th>
