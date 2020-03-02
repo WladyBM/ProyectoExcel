@@ -9,4 +9,8 @@ class Fecha extends Model
     public function producciones(){ //$libro->categoria->nombre
         return $this->hasMany(Produccion::class);
     }
+
+    public function horas(){ //$libro->categoria->nombre
+        return $this->hasMany(Hora::class);
+    }
 }

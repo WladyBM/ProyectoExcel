@@ -4,17 +4,17 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" crossorigin="anonymous">
 @endsection
 
-@section('title', 'ENAP - Produccion')
+@section('title', 'ENAP - Consumo')
 
 @section('body')
 <div class="card">
-        <h3 class="card-header d-flex justify-content-center">Producción anual</h3>
-        <div class="mt-2 d-flex justify-content-center">
-            <a class="btn btn-outline-dark" href="{{ route('ver.excel2') }}">Ver consumo</a>
-        </div>
-        <div class="mt-1 d-flex justify-content-center">
-            {{ $fechas->links() }}
-        </div>
+    <h3 class="card-header d-flex justify-content-center">Consumo anual</h3>
+    <div class="mt-2 d-flex justify-content-center">
+        <a class="btn btn-outline-dark" href="{{ route('ver.excel') }}">Ver produccion</a>
+    </div>
+    <div class="mt-1 d-flex justify-content-center">
+        {{ $fechas->links() }}
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             @if (session('mensaje'))
@@ -39,9 +39,9 @@
                         <tr>
                             <td>{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pozo->nombre)) }}</td>
                             @foreach ($fechas as $fecha)
-                                @foreach ($fecha->producciones as $produccion)
-                                    @if ($produccion->pozo_id == $pozo->id)
-                                        <td>{{ $produccion->cantidad * 1000 }}</td>
+                                @foreach ($fecha->horas as $hora)
+                                    @if ($hora->pozo_id == $pozo->id)
+                                        <td>{{ $hora->hora }}</td>
                                         @break
                                     @endif
                                 @endforeach

@@ -26,13 +26,12 @@ class ExcelController extends Controller
             break;
             }
         }
-
+        
         $dato = array();
         
         $Fechas = new App\Fecha;
         $Fechas->nombre = Date::excelToDateTimeObject($Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(7, 5)->getValue());
         $Fechas->save();
-
 
         for ($i = 12; $i<$final; $i++){
 
@@ -50,6 +49,12 @@ class ExcelController extends Controller
                 $Produccion->fecha_id = $Fechas->id;
                 $Produccion->save();
 
+                $Hora = new App\Hora;
+                $Hora->hora = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(12, $i)->getValue();
+                $Hora->pozo_id = $Pozos->id;
+                $Hora->fecha_id = $Fechas->id;
+                $Hora->save();
+
                 $fechita = App\Fecha::all();
                 if(count($fechita) > 1){
                     foreach($fechita as $fecha){
@@ -62,6 +67,12 @@ class ExcelController extends Controller
                             $Produccion->pozo_id = $Pozos->id;
                             $Produccion->fecha_id = $fecha->id;
                             $Produccion->save();
+
+                            $Hora = new App\Hora;
+                            $Hora->hora = 0;
+                            $Hora->pozo_id = $Pozos->id;
+                            $Hora->fecha_id = $fecha->id;
+                            $Hora->save();
                         }
                     }
                 }
@@ -73,6 +84,12 @@ class ExcelController extends Controller
                 $Produccion->pozo_id = $nombre->id;
                 $Produccion->fecha_id = $Fechas->id;
                 $Produccion->save();
+
+                $Hora = new App\Hora;
+                $Hora->hora = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(12, $i)->getValue();
+                $Hora->pozo_id = $nombre->id;
+                $Hora->fecha_id = $Fechas->id;
+                $Hora->save();
                 
             }
         }
@@ -89,12 +106,17 @@ class ExcelController extends Controller
                 $Produccion->pozo_id = $pozo->id;
                 $Produccion->fecha_id = $Fechas->id;
                 $Produccion->save();
+
+                $Hora = new App\Hora;
+                $Hora->hora = 0;
+                $Hora->pozo_id = $pozo->id;
+                $Hora->fecha_id = $Fechas->id;
+                $Hora->save();
             }
         }
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
-        $producciones = App\Produccion::all();
 
         return view('verexcel', compact('pozos','fechas'));
     }
@@ -103,19 +125,27 @@ class ExcelController extends Controller
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
-        $producciones = App\Produccion::all();
         
         return view('verexcel', compact('pozos','fechas'));
+    }
+
+    public function VerExcel2(){
+        
+        $pozos = App\Pozo::OrderBy('nombre')->get();
+        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
+
+        return view('verhoras', compact('pozos','fechas'));
+
     }
 
     public function Eliminar($id){
 
         $Eliminado = App\Fecha::findOrFail($id);
         $Produccion = App\Produccion::where('fecha_id', $Eliminado->id)->delete();
+        $Hora = App\Hora::where('fecha_id', $Eliminado->id)->delete();
 
         $Eliminado->delete();
 
         return back()->with('mensaje', 'Fecha eliminada exitosamente.');
-
     }
 }
