@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hora extends Model
 {
-    public function fecha(){ //$libro->categoria->nombre
-        return $this->belongsTo(Fecha::class); //Pertenece a una categoría.
+    public function fecha(){
+        return $this->belongsTo(Fecha::class); //Pertenece a una fecha.
+    }
+
+    public function PAD(){
+        return $this->belongsTo(Pads::class); //Pertenece a una fecha.
     }
 }

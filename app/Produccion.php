@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produccion extends Model
 {
-    public function fecha(){ //$libro->categoria->nombre
-        return $this->belongsTo(Fecha::class); //Pertenece a una categoría.
+    public function fecha(){
+        return $this->belongsTo(Fecha::class); //Pertenece a una fecha.
     }
 }

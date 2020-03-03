@@ -16,10 +16,10 @@ class CreateHorasTable extends Migration
         Schema::create('horas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->Integer('hora');
-            $table->unsignedBigInteger('pozo_id');
-            $table->foreign('pozo_id')->references('id')->on('pozos'); //foranea tabla pozos
+            $table->unsignedBigInteger('pad_id');
+            $table->foreign('pad_id')->references('id')->on('pads'); //foranea tabla pads
             $table->unsignedBigInteger('fecha_id');
-            $table->foreign('fecha_id')->references('id')->on('fechas'); //foranea tabla fecha
+            $table->foreign('fecha_id')->references('id')->on('fechas'); //foranea tabla fechas
             $table->timestamps();
         });
     }
