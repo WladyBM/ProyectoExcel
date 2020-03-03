@@ -11,9 +11,59 @@
     <h3 class="card-header d-flex justify-content-center">Consumo anual</h3>
     <div class="mt-2 d-flex justify-content-center">
         <a class="btn btn-outline-dark" href="{{ route('ver.excel') }}">Ver produccion</a>
+        <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Añadir">Añadir PAD</button>
     </div>
-    <div class="mt-1 d-flex justify-content-center">
-        {{ $fechas->links() }}
+    <!-- Integrar modal -->
+    <div class="modal fade" id="Añadir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AñadirLabel">Añade nuevo PAD</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Para añadir un nuevo PAD, debe copiar el nombre que se encuentra en la hoja "Detalle Pozo" dentro del informe consolidado.</h6>
+                    <img src="{{URL::asset('/PAD.png')}}" class="img-fluid" alt="Responsive image">
+                    
+                    <h6>Ejemplos:</h6>
+                        <ul>
+                            <li>MANANTIALES-17</li>
+                            <li>PUNTA_PIEDRA_ZG-1</li>
+                            <li>CHANARCILLO-36</li>
+                        </ul>
+                    <form class="form-inline d-flex justify-content-center" method="POST" action="{{ Route('añadir.pad') }}">
+                        @csrf
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Error al añadir: 
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif    
+                        <div class="form-group mx-sm-3">
+                            <input type="text" class="form-control" name="pad" placeholder="Nombre del PAD">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar ventana</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fin modal -->
+
+    <div class="mt-1 d-flex justify-content-center">    
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -25,49 +75,11 @@
                     </button>
                 </div>
             @endif
-            <table class="table table-striped table-bordered table-sm Produccion" style="width:100%">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col"><strong>Pozos</strong></th>
-                        @foreach ($fechas as $item)
-                                <th>{{ date("d/m/y", strtotime($item->nombre)) }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pozos as $pozo)
-                        <tr>
-                            <td>{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pozo->nombre)) }}</td>
-                            @foreach ($fechas as $fecha)
-                                @foreach ($fecha->horas as $hora)
-                                    @if ($hora->pozo_id == $pozo->id)
-                                        <td>{{ $hora->hora }}</td>
-                                        @break
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col"> </th>
-                        @foreach ($fechas as $item)
-                            <th>
-                                <form action="{{ route('eliminar.fecha', $item) }}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar esta fecha? Fecha: {{ date("d/m/y", strtotime($item->nombre)) }} ')"><i class="fas fa-eraser"></i> Borrar</button>
-                                </form> 
-                            </th>
-                        @endforeach
-                    </tr>
-                </tfoot>
-            </table>
+            
         </div>
     </div>
     <div class="card-footer d-flex justify-content-center">
-        {{$fechas->links()}}
+        
     </div>
 </div>
 @endsection

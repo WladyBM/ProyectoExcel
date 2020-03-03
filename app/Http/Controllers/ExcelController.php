@@ -125,4 +125,14 @@ class ExcelController extends Controller
 
         return back()->with('mensaje', 'Fecha eliminada exitosamente.');
     }
+
+    public function AñadirPAD(Request $request){
+        //dd($request->all());
+
+        $PAD = new App\Pad;
+        $PAD->nombre = $request->pad;
+        $PAD->save();
+
+        return back()->with('mensaje', 'PAD añadido exitosamente');
+    }
 }

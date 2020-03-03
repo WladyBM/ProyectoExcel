@@ -20,3 +20,5 @@ Route::get('/subir', function(){
 Route::delete('/DelFecha/{id}', 'ExcelController@Eliminar')->name('eliminar.fecha');
 
 Route::get('/hora', 'ExcelController@VerExcel2')->name('ver.excel2');
+
+Route::post('/NuevoPAD', 'ExcelController@AñadirPAD')->name('añadir.pad');
