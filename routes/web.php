@@ -9,9 +9,9 @@ Route::get('/', function () {
 
 Route::post('/excel','ExcelController@ImportarExcel')->name('importar.excel');
 
-Route::get('/excel','ExcelController@VerExcel')->name('ver.excel');
+Route::get('/excel','ExcelController@VerProduccion')->name('ver.excel');
 
-Route::get('/dbexcel', 'ExcelController@VerExcel');
+Route::get('/dbexcel', 'ExcelController@VerProduccion');
 
 Route::get('/subir', function(){
     return view('subir');
@@ -19,6 +19,10 @@ Route::get('/subir', function(){
 
 Route::delete('/DelFecha/{id}', 'ExcelController@Eliminar')->name('eliminar.fecha');
 
-Route::get('/hora', 'ExcelController@VerExcel2')->name('ver.excel2');
+Route::get('/hora', 'ExcelController@VerConsumo')->name('ver.excel2');
 
 Route::post('/NuevoPAD', 'ExcelController@AñadirPAD')->name('añadir.pad');
+
+Route::post('/NuevoEquipo', 'ExcelController@AñadirEquipo')->name('añadir.equipo');
+
+Route::post('/AsociarEquipo', 'ExcelController@AsociarEquipo')->name('asociar.equipo');

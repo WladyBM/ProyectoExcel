@@ -98,7 +98,7 @@ class ExcelController extends Controller
         return view('produccion', compact('pozos','fechas'));
     }
 
-    public function VerExcel(){
+    public function VerProduccion(){
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
@@ -106,33 +106,74 @@ class ExcelController extends Controller
         return view('produccion', compact('pozos','fechas'));
     }
 
-    public function VerExcel2(){
-        
-        $pozos = App\Pozo::OrderBy('nombre')->get();
-        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
-
-        return view('consumo', compact('pozos','fechas'));
-
-    }
-
     public function Eliminar($id){
 
         $Eliminado = App\Fecha::findOrFail($id);
         $Produccion = App\Produccion::where('fecha_id', $Eliminado->id)->delete();
-        $Hora = App\Hora::where('fecha_id', $Eliminado->id)->delete();
 
         $Eliminado->delete();
 
         return back()->with('mensaje', 'Fecha eliminada exitosamente.');
     }
 
+    public function VerConsumo(){
+        
+        $pads = App\Pad::OrderBy('nombre')->get();
+        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
+        $equipos = App\Equipo::OrderBy('nombre')->get();
+
+        return view('consumo', compact('pads','fechas', 'equipos'));
+    }
+
     public function AñadirPAD(Request $request){
-        //dd($request->all());
+        
+        $request->validate([
+            'pad' => 'required',
+        ],
+        [
+            'pad.required' => 'El campo "Nombre PAD" es requerido' 
+        ]);
 
         $PAD = new App\Pad;
         $PAD->nombre = $request->pad;
         $PAD->save();
 
-        return back()->with('mensaje', 'PAD añadido exitosamente');
+        return back()->with('mensaje', 'PAD añadido exitosamente.');
+    }
+
+    public function AñadirEquipo(Request $request){
+
+        $request->validate([
+            'equipo' => 'required',
+            'consumo'=> 'required|integer'
+        ],
+        [
+            'equipo.required' => 'El campo "Nombre equipo" es requerido.',
+            'consumo.required' => 'El campo "Consumo" es requerido.',
+            'consumo.integer' => 'Verifique que haya ingresado un valor numerico en el campo "Consumo"'
+        ]);
+
+        $Equipo = new App\Equipo;
+        $Equipo->nombre = $request->equipo;
+        $Equipo->consumo = $request->consumo;
+        $Equipo->save();
+
+        return back()->with('mensaje', 'Equipo ingresado al sistema de manera exitosa.');
+    }
+
+    public function AsociarEquipo(Request $request){
+        $request->validate([
+            'pad' => 'required',
+            'equipo'=> 'required'
+        ],
+        [
+            'pad.required' => 'Seleccione un PAD',
+            'equipo.required' => 'Seleccione uno o varios equipos'
+        ]);
+
+        $pad = App\Pad::findOrFail($request->pad);
+        $pad->equipos()->attach($request->input('equipo'));
+
+        return back()->with('mensaje', 'Se ha(n) asociado(s) el(los) equipo(s) al PAD '.$pad->nombre.'.');
     }
 }
