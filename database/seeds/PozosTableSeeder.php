@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Fecha;
-use App\Pozo;
-use App\Produccion;
+use App\Pad;
 
 class PozosTableSeeder extends Seeder
 {
@@ -14,65 +12,43 @@ class PozosTableSeeder extends Seeder
      */
     public function run()
     {
-        //Fecha::truncate();
+        //Pad::truncate();
 
-        $fecha = new Fecha();
-        $fecha->nombre = "19-12-19";
-        $fecha->save();
+        $pad = new Pad;
+        $pad->nombre = 'ARAUCANO-1';
+        $pad->save();
 
-        $fecha = new Fecha();
-        $fecha->nombre = "19-12-20";
-        $fecha->save();
+        $pad = new Pad;
+        $pad->nombre = 'ARAUCANO_ZG-1';
+        $pad->save();
+        
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_ESTE_ZG-1';
+        $pad->save();
+        
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_ESTE_ZG-2';
+        $pad->save();
 
-        $fecha = new Fecha();
-        $fecha->nombre = "19-12-21";
-        $fecha->save();
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_OESTE-1';
+        $pad->save();
 
-        //Pozo::truncate();
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_OESTE-2';
+        $pad->save();
 
-        $pozo = new Pozo();
-        $pozo->nombre = "ARAUCANO_1";
-        $pozo->save();
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_OESTE_ZG-1';
+        $pad->save();
 
-        $pozo->fechas()->attach([1, 2, 3]);
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_OESTE_ZG-2';
+        $pad->save();
 
-        $pozo = new Pozo();
-        $pozo->nombre = "ARAUCANO_ZG-1A";
-        $pozo->save();
-
-        $pozo->fechas()->attach([1, 2, 3]);
-
-        $pozo = new Pozo();
-        $pozo->nombre = "ARAUCANO_ZG-1B";
-        $pozo->save();
-
-        $pozo->fechas()->attach([1, 2, 3]);
-
-        $pozo = new Pozo();
-        $pozo->nombre = "ARAUCANO_ZG-1C";
-        $pozo->save();
-
-        $pozo->fechas()->attach([1, 2, 3]);
-
-        $produccion = new Produccion();
-        $produccion->cantidad = 1;
-        $produccion->pozo_id=1;
-        $produccion->save();
-
-        $produccion = new Produccion();
-        $produccion->cantidad = 2;
-        $produccion->pozo_id=2;
-        $produccion->save();
-
-        $produccion = new Produccion();
-        $produccion->cantidad = 3;
-        $produccion->pozo_id=3;
-        $produccion->save();
-
-        $produccion = new Produccion();
-        $produccion->cantidad = 10;
-        $produccion->pozo_id=4;
-        $produccion->save();
+        $pad = new Pad;
+        $pad->nombre = 'CABANA_OESTE_ZG-3';
+        $pad->save();
 
     }
 }

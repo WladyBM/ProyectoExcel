@@ -51,7 +51,7 @@
                             </div>
                         @endif    
                         <div class="form-group mx-sm-3">
-                            <input type="text" class="form-control" placeholder="Nombre PAD">
+                            <input type="text" class="form-control" name="pad" placeholder="Nombre PAD">
                         </div>
                         <button type="submit" class="btn btn-primary">Añadir</button>
                     </form>
@@ -164,7 +164,7 @@
                     </button>
                 </div>
             @endif
-            <table class="table table-striped table-bordered table-sm">
+            <table class="table table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col"><strong>PADS</strong></th>
@@ -176,11 +176,11 @@
                 <tbody>
                     @foreach ($pads as $pad)
                         <tr>
-                            <td>{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pad->nombre)) }}</td>
+                            <td class="border border-secondary">{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pad->nombre)) }}</td>
                             @foreach ($fechas as $fecha)
                                 @foreach ($fecha->horas as $hora)
                                     @if ($hora->pad_id == $pad->id)
-                                        <td>{{ $hora->hora }}</td>
+                                        <td class="border border-secondary">{{ $hora->hora }}</td>
                                         @break
                                     @endif
                                 @endforeach
@@ -188,7 +188,7 @@
                         </tr>
                         @foreach ($pad->equipos as $equipo)
                             <tr>
-                                <td>{{ $equipo->nombre }}</td>
+                                <td class="border-right border-left">{{ $equipo->nombre }}</td>
                             </tr>
                         @endforeach
                     @endforeach

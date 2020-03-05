@@ -13,8 +13,12 @@ class ExcelController extends Controller
 {
     public function ImportarExcel(Request $request){
         
-        $this->validate($request, [
-            'archivo' => 'mimes:xlsx,xls'
+        $request->validate([
+            'archivo' => 'required|mimes:xlsx,xls'
+        ],
+        [
+            'archivo.required' => 'Debe subir un archivo.',
+            'archivo.mimes' => 'Debe ingresarse un archivo excel con formato .xlsx o .xls'
         ]);
 
         $path = $request->file('archivo')->getRealPath();
@@ -26,7 +30,34 @@ class ExcelController extends Controller
             break;
             }
         }
-        
+
+        $pads = App\Pad::select('nombre')->get();
+        $hora = array();
+
+        foreach ($pads as $pad) {
+            $cantidad = strlen($pad->nombre);
+
+            for ($i = 12; $i<$final; $i++){
+                if(strncmp($pad->nombre, $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue(), $cantidad) === 0){
+                    $hora[] = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(12, $i)->getValue();
+                }
+            }
+            if(empty($hora)){
+                $Horas = new App\Hora;
+                $Horas->hora = 0;
+                $Horas->save();
+            }else{
+                // Se puede cambiar el max por min (Valor minimo del array) o sacar promedio, depende lo que se necesita
+                $Horas = new App\Hora;
+                $Horas->hora = max($hora);
+                $Horas->save();
+
+                unset($hora);
+            }
+        }
+
+        dd('Ingreso exitoso, revise database');
+
         $dato = array();
         
         $Fechas = new App\Fecha;
