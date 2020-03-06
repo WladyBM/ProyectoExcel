@@ -178,17 +178,36 @@
                         <tr>
                             <td class="border border-secondary">{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pad->nombre)) }}</td>
                             @foreach ($fechas as $fecha)
-                                @foreach ($fecha->horas as $hora)
-                                    @if ($hora->pad_id == $pad->id)
-                                        <td class="border border-secondary">{{ $hora->hora }}</td>
-                                        @break
-                                    @endif
+                                @foreach ($fecha->horas as $hora1)
+                                    @foreach ($pad->horas as $hora2)
+                                        @if ($hora1->id == $hora2->id)
+                                            <td class="border border-secondary">{{ $hora1->hora }}</td>
+                                            @break
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             @endforeach
                         </tr>
                         @foreach ($pad->equipos as $equipo)
                             <tr>
-                                <td class="border-right border-left">{{ $equipo->nombre }}</td>
+                                <td class="border-right border-left">
+                                    <form action="{{ route('eliminar.equipo', $equipo) }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        {{ $equipo->nombre }}
+                                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('¿Está seguro que desea borrar el equipo? Equipo: {{ $equipo->nombre }} ')"><i class="fas fa-eraser"> Borrar</i></button>
+                                    </form>
+                                </td>
+                                @foreach ($fechas as $fecha)
+                                    @foreach ($fecha->horas as $hora1)
+                                        @foreach ($pad->horas as $hora2)
+                                            @if ($hora1->id == $hora2->id)
+                                                <td class="border-right border-left">{{ $equipo->consumo /24 * $hora1->hora }}</td>
+                                                @break
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
                             </tr>
                         @endforeach
                     @endforeach

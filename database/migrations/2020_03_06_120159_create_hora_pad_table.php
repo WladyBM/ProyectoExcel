@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHorasTable extends Migration
+class CreateHoraPadTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateHorasTable extends Migration
      */
     public function up()
     {
-        Schema::create('horas', function (Blueprint $table) {
+        Schema::create('hora_pad', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->Integer('hora');
-            $table->unsignedBigInteger('fecha_id');
-            $table->foreign('fecha_id')->references('id')->on('fechas');
+            $table->unsignedInteger('hora_id');
+            $table->foreign('hora_id')->references('id')->on('horas');
+            $table->unsignedInteger('pad_id');
+            $table->foreign('pad_id')->references('id')->on('pads');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateHorasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('horas');
+        Schema::dropIfExists('hora_pad');
     }
 }

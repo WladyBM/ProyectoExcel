@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Pad;
+use App\Hora;
 
 class PozosTableSeeder extends Seeder
 {
@@ -49,6 +50,5 @@ class PozosTableSeeder extends Seeder
         $pad = new Pad;
         $pad->nombre = 'CABANA_OESTE_ZG-3';
         $pad->save();
-
     }
 }

@@ -31,33 +31,6 @@ class ExcelController extends Controller
             }
         }
 
-        $pads = App\Pad::select('nombre')->get();
-        $hora = array();
-
-        foreach ($pads as $pad) {
-            $cantidad = strlen($pad->nombre);
-
-            for ($i = 12; $i<$final; $i++){
-                if(strncmp($pad->nombre, $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue(), $cantidad) === 0){
-                    $hora[] = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(12, $i)->getValue();
-                }
-            }
-            if(empty($hora)){
-                $Horas = new App\Hora;
-                $Horas->hora = 0;
-                $Horas->save();
-            }else{
-                // Se puede cambiar el max por min (Valor minimo del array) o sacar promedio, depende lo que se necesita
-                $Horas = new App\Hora;
-                $Horas->hora = max($hora);
-                $Horas->save();
-
-                unset($hora);
-            }
-        }
-
-        dd('Ingreso exitoso, revise database');
-
         $dato = array();
         
         $Fechas = new App\Fecha;
@@ -122,6 +95,40 @@ class ExcelController extends Controller
                 $Produccion->save();
             }
         }
+
+        $pads = App\Pad::select('id','nombre')->get();
+        $hora = array();
+
+        foreach ($pads as $pad) {
+            $cantidad = strlen($pad->nombre);
+
+            for ($i = 12; $i<$final; $i++){
+                if(strncmp($pad->nombre, $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(5, $i)->getValue(), $cantidad) === 0){
+                    $hora[] = $Libro->getSheetByName('Detalle Pozos')->getCellByColumnAndRow(12, $i)->getValue();
+                }
+            }
+            if(empty($hora)){
+                $Horas = new App\Hora;
+                $Horas->hora = 0;
+                $Horas->fecha_id = $Fechas->id;
+
+                $Horas->save();
+                $pad->horas()->attach([$Horas->id]);
+
+            }else{
+                // Se puede cambiar el max por min (Valor minimo del array) o sacar promedio, depende lo que se necesita
+                $Horas = new App\Hora;
+                $Horas->hora = max($hora);
+                $Horas->fecha_id = $Fechas->id;
+
+                $Horas->save();
+                $pad->horas()->attach([$Horas->id]);
+
+                unset($hora);
+            }
+        }
+
+        //dd("Bucle terminado sin problemas, revise Database");
 
         $pozos = App\Pozo::OrderBy('nombre')->get();
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
@@ -207,4 +214,14 @@ class ExcelController extends Controller
 
         return back()->with('mensaje', 'Se ha(n) asociado(s) el(los) equipo(s) al PAD '.$pad->nombre.'.');
     }
+
+    public function DesligarEquipo($id){
+
+        $Eliminado = App\Fecha::findOrFail($id);
+        $Produccion = App\Produccion::where('fecha_id', $Eliminado->id)->delete();
+
+        $Eliminado->delete();
+
+        return back()->with('mensaje', 'Fecha eliminada exitosamente.');
+    }    
 }

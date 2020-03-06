@@ -26,3 +26,5 @@ Route::post('/NuevoPAD', 'ExcelController@AñadirPAD')->name('añadir.pad');
 Route::post('/NuevoEquipo', 'ExcelController@AñadirEquipo')->name('añadir.equipo');
 
 Route::post('/AsociarEquipo', 'ExcelController@AsociarEquipo')->name('asociar.equipo');
+
+Route::delete('/DesEquipo/{id}', 'ExcelController@DesligarEquipo')->name('eliminar.equipo');
