@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App;
 
 
@@ -133,13 +134,13 @@ class ExcelController extends Controller
         $pozos = App\Pozo::OrderBy('nombre')->get();
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
 
-        return view('produccion', compact('pozos','fechas'));
+        return back()->with('aviso', 'Excel importado exitosamente, haga clic en el botón para ver produccion.');
     }
 
     public function VerProduccion(){
 
-        $pozos = App\Pozo::OrderBy('nombre')->get();
-        $fechas = App\Fecha::OrderBy('nombre')->paginate(15);
+        $pozos = App\Pozo::OrderBy('nombre')->paginate(50, ['*'], 'pozos');
+        $fechas = App\Fecha::OrderBy('nombre')->paginate(15,['*'], 'fechas');
         
         return view('produccion', compact('pozos','fechas'));
     }
@@ -176,7 +177,38 @@ class ExcelController extends Controller
         $PAD->nombre = $request->pad;
         $PAD->save();
 
+        $Fechas = App\Fecha::all();
+
+        foreach ($Fechas as $fecha){
+            $Horas = new App\Hora;
+            $Horas->hora = 0;
+            $Horas->fecha_id = $fecha->id;
+
+            $Horas->save();
+            $PAD->horas()->attach([$Horas->id]);
+        }
+
         return back()->with('mensaje', 'PAD añadido exitosamente.');
+    }
+
+    public function EliminarPAD($id){
+
+        $Eliminado = App\Pad::findOrFail($id);
+        
+        $Equipos = App\Equipo::all();
+        $Horas = App\Hora::all();
+
+        foreach ($Equipos as $equipo){
+            $Eliminado->equipos()->detach($equipo->id);
+        }
+
+        foreach ($Horas as $hora){
+            $Eliminado->horas()->detach($hora->id);
+        }
+
+        $Eliminado->delete();
+
+        return back()->with('mensaje', 'PAD eliminado exitosamente.');
     }
 
     public function AñadirEquipo(Request $request){
@@ -215,13 +247,22 @@ class ExcelController extends Controller
         return back()->with('mensaje', 'Se ha(n) asociado(s) el(los) equipo(s) al PAD '.$pad->nombre.'.');
     }
 
-    public function DesligarEquipo($id){
+    public function DesligarEquipo($nombre_equipo, $nombre_pad){
 
-        $Eliminado = App\Fecha::findOrFail($id);
-        $Produccion = App\Produccion::where('fecha_id', $Eliminado->id)->delete();
+        $pad = App\Pad::where('nombre','=', $nombre_pad)->first();
+        $equipo = App\Equipo::where('nombre','=', $nombre_equipo)->first();
 
-        $Eliminado->delete();
+        $Pivot = $pad->equipos->where('id', $equipo->id)->first();
 
-        return back()->with('mensaje', 'Fecha eliminada exitosamente.');
+        $pad->equipos()->wherePivot('id','=',$Pivot->pivot->id)->detach();
+
+        return back()->with('mensaje', 'Equipo removido de exitosamente.');
     }    
+
+    public function ExportarExcel(){
+
+        $Writer = new Xlsx($spreadsheet);
+        $Writer->save("Test.xlsx");
+
+    }
 }

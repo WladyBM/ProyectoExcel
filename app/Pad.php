@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pad extends Model
 {
     public function equipos(){
-        return $this->belongsToMany(Equipo::class); //Mucho a mucho
+        return $this->belongsToMany(Equipo::class)->withPivot('id'); //Mucho a mucho
     }
 
     public function horas(){

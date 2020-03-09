@@ -2,6 +2,7 @@
 
 @section('head')
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" crossorigin="anonymous">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('title', 'ENAP - Consumo')
@@ -10,7 +11,7 @@
 <div class="card">
     <h3 class="card-header d-flex justify-content-center">Consumo anual</h3>
     <div class="mt-2 d-flex justify-content-center">
-        <a class="btn btn-outline-dark" href="{{ route('ver.excel') }}">Ver produccion</a>
+        <a class="btn btn-outline-dark" href="{{ route('ver.produccion') }}">Ver produccion</a>
         <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Añadir1">Añadir PADS</button>
         <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Añadir2">Ingresar nuevos equipos</button>
         <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Asociar">Asociar equipo a PAD</button>
@@ -152,7 +153,8 @@
     </div>
     <!-- Fin modal -->
 
-    <div class="mt-1 d-flex justify-content-center">    
+    <div class="mt-2 d-flex justify-content-center">
+        {{ $fechas->links() }}
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -167,16 +169,24 @@
             <table class="table table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col"><strong>PADS</strong></th>
+                        <th class="border-right border-left border-secondary" scope="col"><strong>PADS</strong></th>
+                        <th class="border-right border-left border-secondary"></th>
                         @foreach ($fechas as $item)
-                                <th>{{ date("d/m/y", strtotime($item->nombre)) }}</th>
+                                <th class="border-right border-left border-secondary">{{ date("d/m/y", strtotime($item->nombre)) }}</th>
                         @endforeach
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="Tabla">
                     @foreach ($pads as $pad)
                         <tr>
-                            <td class="border border-secondary">{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pad->nombre)) }}</td>
+                            <td class="border border-secondary" style="width:100px">{{ str_replace('ANA', 'AÑA', str_replace(['_','-'], ' ', $pad->nombre)) }}</td>
+                            <td class="border border-secondary" style="width:100px">
+                                <form action="{{ route('eliminar.pad', $pad) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar {{ $pad->nombre }} ?')"><i class="fas fa-eraser"></i></button>
+                                </form>
+                            </td>
                             @foreach ($fechas as $fecha)
                                 @foreach ($fecha->horas as $hora1)
                                     @foreach ($pad->horas as $hora2)
@@ -190,19 +200,19 @@
                         </tr>
                         @foreach ($pad->equipos as $equipo)
                             <tr>
+                                <td class="border-right border-left">{{ $equipo->nombre }}</td>
                                 <td class="border-right border-left">
-                                    <form action="{{ route('eliminar.equipo', $equipo) }}" method="POST">
+                                    <form action="{{ route('eliminar.equipo', ['nombre_equipo'=>$equipo->nombre, 'nombre_pad'=>$pad->nombre]) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
-                                        {{ $equipo->nombre }}
-                                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('¿Está seguro que desea borrar el equipo? Equipo: {{ $equipo->nombre }} ')"><i class="fas fa-eraser"> Borrar</i></button>
+                                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('¿Está seguro que desea borrar {{ $equipo->nombre }} de {{ $pad->nombre }} ?')"><i class="fas fa-eraser">Quitar</i></button>
                                     </form>
                                 </td>
                                 @foreach ($fechas as $fecha)
                                     @foreach ($fecha->horas as $hora1)
                                         @foreach ($pad->horas as $hora2)
                                             @if ($hora1->id == $hora2->id)
-                                                <td class="border-right border-left">{{ $equipo->consumo /24 * $hora1->hora }}</td>
+                                                <td class="border-right border-left">{{ round($equipo->consumo /24 * $hora1->hora) }}</td>
                                                 @break
                                             @endif
                                         @endforeach
@@ -214,6 +224,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th scope="col"> </th>
                         <th scope="col"> </th>
                         @foreach ($fechas as $item)
                             <th>
@@ -230,7 +241,7 @@
         </div>
     </div>
     <div class="card-footer d-flex justify-content-center">
-        
+        {{$fechas->links()}}
     </div>
 </div>
 @endsection

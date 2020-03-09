@@ -32,5 +32,11 @@
                 </div>
             </form>
         </div>
+        @if (session('aviso'))
+            <h5 class="d-flex justify-content-center">{{ session('aviso') }}</h5>
+            <div class="mt-2 d-flex justify-content-center">
+                <a class="btn btn-outline-dark mb-2" href="{{ route('ver.produccion') }}">Ver produccion</a>
+            </div>
+        @endif
     </div>
 @endsection
