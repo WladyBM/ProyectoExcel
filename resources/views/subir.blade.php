@@ -23,7 +23,7 @@
             @endif            
                 <div class="input-group">
                     <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="archivo">
+                    <input type="file" class="custom-file-input" name="archivo[]" multiple>
                     <label class="custom-file-label">Elija archivo</label>
                     </div>
                     <div class="input-group-append">

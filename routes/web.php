@@ -26,4 +26,4 @@ Route::delete('/UntieEquipment/{nombre_equipo}/{nombre_pad}', 'ExcelController@D
 
 Route::delete('/DelPAD/{id}', 'ExcelController@EliminarPAD')->name('eliminar.pad');
 
-Route::get('/Export','ExcelController@ExportarExcel')->name('exportar.excel');
+Route::post('/Export','ExcelController@ExportarExcel')->name('exportar.excel');

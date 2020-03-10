@@ -11,8 +11,8 @@
         <h3 class="card-header d-flex justify-content-center">Producción anual</h3>
         <div class="mt-2 d-flex justify-content-center">
             <a class="btn btn-outline-dark" href="{{ route('ver.consumo') }}">Ver consumo</a>
-            <a class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Excel" }}">Subir excel</a>
-            <a class="btn btn-outline-primary ml-2" href="">Exportar</a>
+            <a class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Excel">Subir excel</a>
+            <a class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Exportar">Exportar</a>
         </div>
 
         <!-- Modal subir excel -->
@@ -59,6 +59,46 @@
         </div>
 
         <!-- Fin modal subir excel -->
+
+        <!-- Modal exportar -->
+        <div class="modal fade" id="Exportar" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AñadirLabel">Exporte producción, consumo o ambos.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Seleccione una o varias opciones</h6>
+                        <form class="form justify-content-center" method="POST" action="{{ Route('exportar.excel') }}">
+                            @csrf
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    Error al asociar: 
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif 
+                            <select class="form-group custom-select" name="modulo[]" size="2" multiple required>
+                                <option value="0">Producción</option>
+                                <option value="1">Consumo</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Añadir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fin modal exportar -->
 
         <div class="mt-1 d-flex justify-content-center">
             {{$fechas->appends(['pozos' => $pozos->currentPage()])->links()}}
