@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 use App;
 
 
@@ -261,8 +265,21 @@ class ExcelController extends Controller
 
     public function ExportarExcel(){
 
-        $Writer = new Xlsx($spreadsheet);
-        $Writer->save("Test.xlsx");
+        $Libro = new Spreadsheet();
+        $Hoja = $Libro->getActiveSheet();
+        $Hoja->setTitle('Produccion');
 
+        $Cell = $Hoja->getCellByColumnAndRow(2,2)->setValue('Hola'); // (Columna, Fila)
+        $Cell = $Hoja->getStyle(2,2)->getFill()->getStartColor()->setARGB('FFFF0000');
+        
+
+        $Writer = new Xlsx($Libro);
+
+        try{
+            $Writer->save('Test.xlsx');
+            echo 'Creado';
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
     }
 }

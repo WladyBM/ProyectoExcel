@@ -15,9 +15,9 @@ class CreateEquipoPadTable extends Migration
     {
         Schema::create('equipo_pad', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('equipo_id');
+            $table->unsignedbigInteger('equipo_id');
             $table->foreign('equipo_id')->references('id')->on('equipos');
-            $table->unsignedInteger('pad_id');
+            $table->unsignedbigInteger('pad_id');
             $table->foreign('pad_id')->references('id')->on('pads');
             $table->timestamps();
         });

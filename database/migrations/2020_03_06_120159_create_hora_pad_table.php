@@ -15,9 +15,9 @@ class CreateHoraPadTable extends Migration
     {
         Schema::create('hora_pad', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('hora_id');
+            $table->unsignedbigInteger('hora_id');
             $table->foreign('hora_id')->references('id')->on('horas');
-            $table->unsignedInteger('pad_id');
+            $table->unsignedbigInteger('pad_id');
             $table->foreign('pad_id')->references('id')->on('pads');
             $table->timestamps();
         });
