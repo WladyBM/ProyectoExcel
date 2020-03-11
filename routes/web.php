@@ -6,7 +6,7 @@ Route::get('/', function () {
 
 Route::post('/Import','ExcelController@ImportarExcel')->name('importar.excel');
 
-Route::get('/Production','ExcelController@VerProduccion')->name('ver.produccion');
+Route::get('/Production/ViewWells={paginate}','ExcelController@VerProduccion')->name('ver.produccion');
 
 Route::get('/Upload', function(){
     return view('subir');

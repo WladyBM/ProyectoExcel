@@ -9,10 +9,13 @@
 @section('body')
 <div class="card">
         <h3 class="card-header d-flex justify-content-center">Producción anual</h3>
-        <div class="mt-2 d-flex justify-content-center">
+        <div class="mt-2 mb-2 d-flex justify-content-center">
             <a class="btn btn-outline-dark" href="{{ route('ver.consumo') }}">Ver consumo</a>
             <a class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Excel">Subir excel</a>
             <a class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Exportar">Exportar</a>
+        </div>
+        <div class="mt-1 d-flex justify-content-center">
+            {{$fechas->appends(['pozos' => $pozos->currentPage()])->links()}}
         </div>
 
         <!-- Modal subir excel -->
@@ -45,11 +48,11 @@
                         @endif            
                             <div class="input-group">
                                 <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="archivo" lang="es">
-                                <label class="custom-file-label">Elija archivo</label>
+                                    <input type="file" class="custom-file-input" name="archivo[]" lang="es" multiple>
+                                    <label class="custom-file-label">Elija archivo(s)</label>
                                 </div>
                                 <div class="input-group-append">
-                                <button class="btn btn-outline-primary" type="submit">Importar</button>
+                                    <button class="btn btn-outline-primary" type="submit">Importar</button>
                                 </div>
                             </div>
                         </form>
@@ -57,7 +60,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Fin modal subir excel -->
 
         <!-- Modal exportar -->
@@ -97,13 +99,25 @@
                 </div>
             </div>
         </div>
-
         <!-- Fin modal exportar -->
 
-        <div class="mt-1 d-flex justify-content-center">
-            {{$fechas->appends(['pozos' => $pozos->currentPage()])->links()}}
-        </div>
     <div class="card-body">
+        <div class="d-flex justify-content-around">
+            <div class="dropdown mr-2">
+                <button type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Cantidad pozos
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{{route('ver.produccion', $paginate=50)}}">50</a>
+                  <a class="dropdown-item" href="{{route('ver.produccion', $paginate=100)}}">100</a>
+                  <a class="dropdown-item" href="{{route('ver.produccion', $paginate=150)}}">150</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{{route('ver.produccion', $paginate=$page)}}">Todos</a>
+                </div>
+            </div>
+            <input class="form-control mb-2 mr-2" id="Buscador" type="text" placeholder="Buscar ...">
+            {{$pozos->appends(['fechas' => $fechas->currentPage()])->links()}}
+        </div>
         <div class="table-responsive">
             @if (session('mensaje'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -113,11 +127,7 @@
                     </button>
                 </div>
             @endif
-            <div class="d-flex justify-content-around">
-                <input class="form-control mb-2 mr-2" id="Buscador" type="text" placeholder="Buscar ...">
-                {{$pozos->appends(['fechas' => $fechas->currentPage()])->links()}}
-            </div>
-            <table class="table table-striped table-bordered table-sm Produccion" style="width:100%">
+            <table class="table table-striped table-bordered table-sm Produccion">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col"><strong>Pozos</strong></th>

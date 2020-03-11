@@ -142,12 +142,13 @@ class ExcelController extends Controller
         return back()->with('aviso', 'Archivo(s) importado(s) exitosamente, haga clic en el botón para ver produccion.');
     }
 
-    public function VerProduccion(){
+    public function VerProduccion($paginate){
 
-        $pozos = App\Pozo::OrderBy('nombre')->paginate(50, ['*'], 'pozos');
+        $pozos = App\Pozo::OrderBy('nombre')->paginate($paginate, ['*'], 'pozos');
         $fechas = App\Fecha::OrderBy('nombre')->paginate(15,['*'], 'fechas');
+        $page = count(App\Pozo::OrderBy('nombre')->get());
         
-        return view('produccion', compact('pozos','fechas'));
+        return view('produccion', compact('pozos','fechas','page'));
     }
 
     public function Eliminar($id){

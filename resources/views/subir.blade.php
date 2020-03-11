@@ -23,11 +23,11 @@
             @endif            
                 <div class="input-group">
                     <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="archivo[]" multiple>
-                    <label class="custom-file-label">Elija archivo</label>
+                        <input type="file" class="custom-file-input" name="archivo[]" multiple>
+                        <label class="custom-file-label">Elija archivo(s)</label>
                     </div>
                     <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit">Subir excel</button>
+                        <button class="btn btn-outline-primary" type="submit">Subir excel</button>
                     </div>
                 </div>
             </form>

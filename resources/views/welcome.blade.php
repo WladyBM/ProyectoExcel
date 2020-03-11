@@ -85,7 +85,7 @@
 
                 <div class="links">
                     <a href="{{route('subir.excel')}}">Subir excel</a>
-                    <a href="{{route('ver.produccion')}}">Ver pozos</a>
+                    <a href="{{route('ver.produccion', $paginate=50)}}">Ver pozos</a>
                 </div>
             </div>
         </div>

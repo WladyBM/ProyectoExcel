@@ -11,10 +11,12 @@
 <div class="card">
     <h3 class="card-header d-flex justify-content-center">Consumo anual</h3>
     <div class="mt-2 d-flex justify-content-center">
-        <a class="btn btn-outline-dark" href="{{ route('ver.produccion') }}">Ver produccion</a>
-        <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Añadir1">Añadir PADS</button>
-        <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Añadir2">Ingresar nuevos equipos</button>
-        <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#Asociar">Asociar equipo a PAD</button>
+        <a class="btn btn-outline-dark" style="width:30%" href="{{route('ver.produccion', $paginate=50)}}">Ver producción</a>
+        <button type="button" class="btn btn-outline-primary ml-2" style="width:30%" data-toggle="modal" data-target="#Añadir1">Añadir PADS</button>
+    </div>
+    <div class="mt-2 d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-primary" style="width:30%" data-toggle="modal" data-target="#Añadir2">Añadir equipos</button>
+        <button type="button" class="btn btn-outline-primary ml-2" style="width:30%" data-toggle="modal" data-target="#Asociar">Asociar equipos</button>
     </div>
     <!-- Modal añadir PADS -->
     <div class="modal fade" id="Añadir1" tabindex="-1" role="dialog" aria-hidden="true">
@@ -166,7 +168,7 @@
                     </button>
                 </div>
             @endif
-            <table class="table table-striped table-sm">
+            <table class="table table-sm">
                 <thead class="thead-dark">
                     <tr>
                         <th class="border-right border-left border-secondary" scope="col"><strong>PADS</strong></th>
